@@ -7,14 +7,17 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "ubuntu/trusty64"
+  config.vm.hostname = 'example-box-hostname'
 
   config.vm.provider :virtualbox do |provider, override|
     provider.gui = true
     provider.memory = 1024
     provider.cpus = 4
+    provider.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     override.vm.network "private_network", ip: "192.168.50.4",
       virtualbox__intnet: true
-    provider.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      override.vm.network "forwarded_port", guest: 80, host: 8888
+      override.vm.network "forwarded_port", guest: 443, host: 8889
   end
 
   config.vm.provider :digital_ocean do |provider, override|

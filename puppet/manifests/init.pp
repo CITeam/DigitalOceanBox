@@ -4,7 +4,7 @@ exec { 'apt-get update':
   path => '/usr/bin',
 }
 
-package { 'vim':
+package { ['vim', 'htop']:
   ensure => present,
 }
 
