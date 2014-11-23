@@ -11,7 +11,7 @@ package { 'vim':
 package { 'git':
   ensure => present,
 }
-package { 'drush':
+package { ['drush', 'pv']:
   ensure => present,
 }
 

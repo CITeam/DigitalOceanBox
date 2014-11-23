@@ -1,23 +1,11 @@
 server {
-  listen 80;
-  server_name _;
-  root /var/www/app;
-  index index.php;
-
-  location / {
-    try_files $uri /index.php;
-  }
-
-  location ~ \.php$ {
-    fastcgi_pass unix:/var/run/php5-fpm.sock;
-    fastcgi_index index.php;
-    include fastcgi_params;
-  }
-}
-server {
-        server_name vergel.spheresh.com;
+        server_name _;
         root /var/www/app; ## <-- Your only path reference.
 
+		listen              80;
+    	listen              443 ssl;
+        ssl_certificate     /etc/nginx/ssl/server.crt;
+        ssl_certificate_key /etc/nginx/ssl/server.key;
  
         # Enable compression, this will help if you have for instance advagg‎ module
         # by serving Gzip versions of the files.
@@ -63,8 +51,9 @@ server {
         }
  
         location / {
-		auth_basic "Restricted";
-		auth_basic_user_file /etc/nginx/.htpasswd;
+        		index  index.php;
+				# auth_basic "Restricted";
+				# auth_basic_user_file /etc/nginx/.htpasswd;
                 # This is cool because no php is touched for static content
                 try_files $uri @rewrite;
         }
@@ -81,7 +70,7 @@ server {
         }
  
         location ~ \.php$ {
-                #fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
                 #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
                 include fastcgi_params;
                 fastcgi_param SCRIPT_FILENAME $request_filename;

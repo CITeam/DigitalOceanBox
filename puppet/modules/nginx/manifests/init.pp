@@ -27,6 +27,21 @@ class nginx {
       source => 'puppet:///modules/nginx/drupal',
   }
 
+  file { "/etc/nginx/ssl":
+      ensure => "directory",
+      require => Package['nginx'],
+  }
+  file { '/etc/nginx/ssl/server.crt':
+    source  => 'puppet:///modules/nginx/ssl/server.crt',
+    require => File['/etc/nginx/ssl'],
+    notify  => Service['nginx'],
+  }
+  file { '/etc/nginx/ssl/server.key':
+    source  => 'puppet:///modules/nginx/ssl/server.key',
+    require => File['/etc/nginx/ssl'],
+    notify  => Service['nginx'],
+  }
+
   # Disable the default nginx vhost
   file { 'default-nginx-disable':
     path => '/etc/nginx/sites-enabled/default',
