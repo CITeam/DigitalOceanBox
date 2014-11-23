@@ -45,16 +45,6 @@ class nginx {
       File['default-nginx-disable'],
     ],
   }
-
-  exec { 'set_make_platform':
-    #command => "pwd > test.path",
-    command => "git clone -b 7.x git@github.com:pfizer/platforms.git makes",
-    path    => ['/bin', '/usr/bin'],
-    #require => Service['nginx'],
-    onlyif => ["ls -la | grep makes"],
-  }
-  
-
-  
+ 
 
 }
